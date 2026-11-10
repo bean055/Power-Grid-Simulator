@@ -89,13 +89,12 @@ public partial class MainViewModel : ObservableObject
     {
         if (Blueprint == null) return;
 
-        var events = new List<SimEvent> { new(30, SimEventType.BreakCable, "Cable4") };
+        var events = new List<SimEvent> { new(30, SimEventType.BreakCable, "Cable1") };//to satifsy run
         Timeline = Simulator.Run(Blueprint, events, 168);
 
         var f = Timeline.Frames[0];
         Debug.WriteLine(
-            $"{Blueprint.TownName}: {Blueprint.Nodes.Count} nodes, {Blueprint.Cables.Count} cables, " +
-            $"{Timeline.Frames.Count} frames, hour 0 gen {f.TotalGenerationMW:F0} MW / demand {f.TotalDemandMW:F0} MW");
+            $"{Blueprint.TownName}: {Blueprint.Nodes.Count} nodes, {Blueprint.Cables.Count} cables");
     }
 
     [RelayCommand]
