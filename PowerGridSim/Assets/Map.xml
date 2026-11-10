@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PowerGridBlueprint xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" TownName="SimTown">
+  <Nodes>
+    <MapNode xsi:type="GeneratorNode" Id="PowerPlant1" Name="PowerPlant1" X="2100" Y="2500" GeneratorType="PowerPlant" PowerFactor="1">
+      <Rating NominalMW="1200" ThermalLimitMW="1200" EmergencyLimitMW="1380" />
+    </MapNode>
+    <MapNode xsi:type="GeneratorNode" Id="HVDC_Link1" Name="HVDC_Link1" X="2100" Y="3500" GeneratorType="HVDC_Link" PowerFactor="1">
+      <Rating NominalMW="650" ThermalLimitMW="650" EmergencyLimitMW="747.5" />
+    </MapNode>
+    <MapNode xsi:type="GeneratorNode" Id="Solar1" Name="Solar1" X="2400" Y="2000" GeneratorType="AlternativeGeneration" PowerFactor="1">
+      <Rating NominalMW="180" ThermalLimitMW="180" EmergencyLimitMW="207" />
+    </MapNode>
+
+    <MapNode xsi:type="SubstationNode" Id="TransmissionSubstation1" Name="TransmissionSubstation1" X="2700" Y="2500" SubstationType="TransmissionSubstation">
+      <Rating NominalMW="2000" ThermalLimitMW="2000" EmergencyLimitMW="2300" />
+    </MapNode>
+    <MapNode xsi:type="SubstationNode" Id="TransmissionSubstation2" Name="TransmissionSubstation2" X="2700" Y="3500" SubstationType="TransmissionSubstation">
+      <Rating NominalMW="2000" ThermalLimitMW="2000" EmergencyLimitMW="2300" />
+    </MapNode>
+    <MapNode xsi:type="SubstationNode" Id="GridSupplyPoint1" Name="GridSupplyPoint1" X="3200" Y="2300" SubstationType="GridSupplyPoint">
+      <Rating NominalMW="1000" ThermalLimitMW="1000" EmergencyLimitMW="1150" />
+    </MapNode>
+    <MapNode xsi:type="SubstationNode" Id="GridSupplyPoint2" Name="GridSupplyPoint2" X="3500" Y="3000" SubstationType="GridSupplyPoint">
+      <Rating NominalMW="1500" ThermalLimitMW="1500" EmergencyLimitMW="1725" />
+    </MapNode>
+    <MapNode xsi:type="SubstationNode" Id="GridSupplyPoint3" Name="GridSupplyPoint3" X="3200" Y="3700" SubstationType="GridSupplyPoint">
+      <Rating NominalMW="1000" ThermalLimitMW="1000" EmergencyLimitMW="1150" />
+    </MapNode>
+    <MapNode xsi:type="SubstationNode" Id="DistributionSubstation1" Name="DistributionSubstation1" X="4200" Y="2100" SubstationType="DistributionSubstation">
+      <Rating NominalMW="500" ThermalLimitMW="500" EmergencyLimitMW="575" />
+    </MapNode>
+    <MapNode xsi:type="SubstationNode" Id="DistributionSubstation2" Name="DistributionSubstation2" X="4500" Y="3000" SubstationType="DistributionSubstation">
+      <Rating NominalMW="600" ThermalLimitMW="600" EmergencyLimitMW="690" />
+    </MapNode>
+    <MapNode xsi:type="SubstationNode" Id="DistributionSubstation3" Name="DistributionSubstation3" X="4200" Y="3900" SubstationType="DistributionSubstation">
+      <Rating NominalMW="500" ThermalLimitMW="500" EmergencyLimitMW="575" />
+    </MapNode>
+
+    <MapNode xsi:type="ConsumerNode" Id="IndustrialConsumer1" Name="IndustrialConsumer1" X="3803.3775024414062" Y="3213.9215698242188" ConsumerType="Industrial">
+      <Rating NominalMW="850" ThermalLimitMW="850" EmergencyLimitMW="977.5" />
+    </MapNode>
+    <MapNode xsi:type="ConsumerNode" Id="ResidentialConsumer1" Name="ResidentialConsumer1" X="4900" Y="1800" ConsumerType="Residential">
+      <Rating NominalMW="320" ThermalLimitMW="320" EmergencyLimitMW="368" />
+    </MapNode>
+    <MapNode xsi:type="ConsumerNode" Id="CommercialConsumer1" Name="CommercialConsumer1" X="5200" Y="3000" ConsumerType="Commercial">
+      <Rating NominalMW="450" ThermalLimitMW="450" EmergencyLimitMW="517.5" />
+    </MapNode>
+    <MapNode xsi:type="ConsumerNode" Id="ResidentialConsumer2" Name="ResidentialConsumer2" X="4900" Y="4200" ConsumerType="Residential">
+      <Rating NominalMW="380" ThermalLimitMW="380" EmergencyLimitMW="437" />
+    </MapNode>
+  </Nodes>
+
+  <Cables>
+    <GridCable Id="Cable1" Name="Cable1" Type="TransmissionLine" FromNodeId="PowerPlant1" ToNodeId="TransmissionSubstation1">
+      <Rating NominalMW="1200" ThermalLimitMW="1200" EmergencyLimitMW="1380" />
+    </GridCable>
+    <GridCable Id="Cable2" Name="Cable2" Type="TransmissionLine" FromNodeId="HVDC_Link1" ToNodeId="TransmissionSubstation2">
+      <Rating NominalMW="700" ThermalLimitMW="700" EmergencyLimitMW="805" />
+    </GridCable>
+    <GridCable Id="Cable3" Name="Cable3" Type="TransmissionLine" FromNodeId="Solar1" ToNodeId="TransmissionSubstation1">
+      <Rating NominalMW="200" ThermalLimitMW="200" EmergencyLimitMW="230" />
+    </GridCable>
+    <GridCable Id="Cable4" Name="Cable4" Type="TransmissionLine" FromNodeId="TransmissionSubstation1" ToNodeId="TransmissionSubstation2">
+      <Rating NominalMW="1500" ThermalLimitMW="1500" EmergencyLimitMW="1725" />
+    </GridCable>
+    <GridCable Id="Cable5" Name="Cable5" Type="TransmissionLine" FromNodeId="TransmissionSubstation1" ToNodeId="GridSupplyPoint1">
+      <Rating NominalMW="800" ThermalLimitMW="800" EmergencyLimitMW="920" />
+    </GridCable>
+    <GridCable Id="Cable6" Name="Cable6" Type="TransmissionLine" FromNodeId="TransmissionSubstation1" ToNodeId="GridSupplyPoint2">
+      <Rating NominalMW="1000" ThermalLimitMW="1000" EmergencyLimitMW="1150" />
+    </GridCable>
+    <GridCable Id="Cable7" Name="Cable7" Type="TransmissionLine" FromNodeId="TransmissionSubstation2" ToNodeId="GridSupplyPoint2">
+      <Rating NominalMW="1000" ThermalLimitMW="1000" EmergencyLimitMW="1150" />
+    </GridCable>
+    <GridCable Id="Cable8" Name="Cable8" Type="TransmissionLine" FromNodeId="TransmissionSubstation2" ToNodeId="GridSupplyPoint3">
+      <Rating NominalMW="800" ThermalLimitMW="800" EmergencyLimitMW="920" />
+    </GridCable>
+    <GridCable Id="Cable9" Name="Cable9" Type="TransmissionLine" FromNodeId="GridSupplyPoint2" ToNodeId="IndustrialConsumer1">
+      <Rating NominalMW="1000" ThermalLimitMW="1000" EmergencyLimitMW="1150" />
+    </GridCable>
+    <GridCable Id="Cable10" Name="Cable10" Type="DistributionLine" FromNodeId="GridSupplyPoint1" ToNodeId="DistributionSubstation1">
+      <Rating NominalMW="300" ThermalLimitMW="300" EmergencyLimitMW="345" />
+    </GridCable>
+    <GridCable Id="Cable11" Name="Cable11" Type="DistributionLine" FromNodeId="GridSupplyPoint2" ToNodeId="DistributionSubstation1">
+      <Rating NominalMW="250" ThermalLimitMW="250" EmergencyLimitMW="287.5" />
+    </GridCable>
+    <GridCable Id="Cable12" Name="Cable12" Type="DistributionLine" FromNodeId="GridSupplyPoint2" ToNodeId="DistributionSubstation2">
+      <Rating NominalMW="400" ThermalLimitMW="400" EmergencyLimitMW="460" />
+    </GridCable>
+    <GridCable Id="Cable13" Name="Cable13" Type="DistributionLine" FromNodeId="GridSupplyPoint2" ToNodeId="DistributionSubstation3">
+      <Rating NominalMW="250" ThermalLimitMW="250" EmergencyLimitMW="287.5" />
+    </GridCable>
+    <GridCable Id="Cable14" Name="Cable14" Type="DistributionLine" FromNodeId="GridSupplyPoint3" ToNodeId="DistributionSubstation3">
+      <Rating NominalMW="300" ThermalLimitMW="300" EmergencyLimitMW="345" />
+    </GridCable>
+    <GridCable Id="Cable15" Name="Cable15" Type="DistributionLine" FromNodeId="DistributionSubstation1" ToNodeId="ResidentialConsumer1">
+      <Rating NominalMW="350" ThermalLimitMW="350" EmergencyLimitMW="402.5" />
+    </GridCable>
+    <GridCable Id="Cable16" Name="Cable16" Type="DistributionLine" FromNodeId="DistributionSubstation2" ToNodeId="CommercialConsumer1">
+      <Rating NominalMW="500" ThermalLimitMW="500" EmergencyLimitMW="575" />
+    </GridCable>
+    <GridCable Id="Cable17" Name="Cable17" Type="DistributionLine" FromNodeId="DistributionSubstation3" ToNodeId="ResidentialConsumer2">
+      <Rating NominalMW="400" ThermalLimitMW="400" EmergencyLimitMW="460" />
+    </GridCable>
+  </Cables>
+</PowerGridBlueprint>

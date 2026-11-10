@@ -1,0 +1,198 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:PowerGridSim.ViewModels"
+        xmlns:v="using:PowerGridSim.Views"
+        x:Class="PowerGridSim.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Title="PowerGridSim"
+        Width="1200" Height="800"
+        Background="#450500">
+
+    <Window.Styles>
+        <Style Selector="Button.NavTab">
+            <Setter Property="FontFamily" Value="Biome, monospace"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#888888"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Button.NavTab.active">
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style Selector="TextBlock.Inspectorh1">
+            <Setter Property="Foreground" Value="#fff"/>
+            <Setter Property="FontFamily" Value="Consolas, Courier New, monospace"/>
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+        <Style Selector="TextBlock.MetricLabel">
+            <Setter Property="Foreground" Value="#8A8A8A"/>
+            <Setter Property="FontFamily" Value="Consolas, Courier New, monospace"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="0,0,0,10"/>
+        </Style>
+        <Style Selector="TextBlock.MetricValue">
+            <Setter Property="Foreground" Value="#396282"/>
+            <Setter Property="FontFamily" Value="Consolas, Courier New, monospace"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        <Style Selector="Button.Btn-Time">
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="Auto,*">
+
+        <Border Grid.Row="0" Background="#080A0B" Padding="10">
+            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*">
+                <TextBlock Grid.Row="0" Grid.ColumnSpan="2"
+                           Text="Power Grid Sim"
+                           Foreground="White"
+                           FontSize="14" FontFamily="Biome, monospace"
+                           HorizontalAlignment="Left" Margin="0,0,0,2"/>
+
+                <Button Grid.Row="1" Grid.Column="0"
+                        Content="Live Map"
+                        Classes="NavTab"
+                        Classes.active="{Binding IsLiveMapMode}"
+                        Command="{Binding SetModeCommand}"
+                        CommandParameter="LiveMap"/>
+
+                <Button Grid.Row="1" Grid.Column="1"
+                        Content="Analytics"
+                        Classes="NavTab"
+                        Classes.active="{Binding IsAnalyticsMode}"
+                        Command="{Binding SetModeCommand}"
+                        CommandParameter="Analytics"/>
+            </Grid>
+            </Border>
+
+            <Grid Grid.Row="1">
+
+                <!-- map page -->
+                <Grid IsVisible="{Binding IsLiveMapMode}" RowDefinitions="*,Auto">
+
+                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                        <Border Grid.Column="0" BorderBrush="White" BorderThickness="2">
+                            <v:MapViewpoint Blueprint="{Binding Blueprint}"
+                    SelectedNode="{Binding SelectedNode, Mode=TwoWay}"/>
+                        </Border>
+
+                    <Panel Grid.Column="1" Background="#101416" MinWidth="250">
+                    <StackPanel Margin="10" Spacing="6">
+                        <TextBlock Text="Inspector" FontWeight="Bold" FontSize="16" Foreground="White"/>
+
+                        <TextBlock Text="Click a node to inspect it" Foreground="#888888"
+                                   IsVisible="{Binding !HasSelection}"/>
+
+                        <StackPanel Spacing="6" IsVisible="{Binding HasSelection}">
+                            <TextBlock Text="{Binding SelectedNode.Name}" Classes="Inspectorh1"/>
+                            <TextBlock Text="{Binding SelectedTypeText}" Foreground="#9AA0B8"/>
+                            <TextBlock Text="{Binding SelectedNode.Id, StringFormat='ID: {0}'}" Foreground="#9AA0B8"/>
+            
+                            <Separator Margin="0,4"/>
+
+            
+                <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                
+                    <!--metrics <-->
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Rating:" Classes="MetricLabel"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SelectedNode.Rating.NominalMVA, StringFormat='{}{0:F0} MVA'}" Classes="MetricValue"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Nominal KV:" Classes="MetricLabel"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedNode.EffectiveKV, StringFormat='{}{0:F0} kV'}" Classes="MetricValue"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Active:" Classes="MetricLabel"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SelectedState.ActivePowerMW, StringFormat='{}{0:F1} MW'}" Classes="MetricValue"/>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Reactive:" Classes="MetricLabel"/>
+                    <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding SelectedState.ReactivePowerMvar, StringFormat='{}{0:F1} Mvar'}" Classes="MetricValue"/>
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Voltage:" Classes="MetricLabel"/>
+                    <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding SelectedState.VoltagePu, StringFormat='{}{0:F3} pu ({0:F1} kV)'}" Classes="MetricValue"/>
+
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="Angle:" Classes="MetricLabel"/>
+                    <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding SelectedState.VoltagePhaseAngle, StringFormat='{}{0:F2}°'}" Classes="MetricValue"/>
+
+                    <!--  status -->
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="Status:" Classes="MetricLabel"/>
+                    <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding SelectedState.IsBlackedOut, StringFormat='Blacked out: {0}'}" Classes="MetricValue"/>
+
+                </Grid>
+            </StackPanel>
+        </StackPanel>
+    </Panel>
+ </Grid>
+    <Border Grid.Row="1" Background="#101416" Padding="16,10">
+
+        <Grid RowDefinitions="Auto,Auto,Auto">
+
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" Spacing="2">
+                    <TextBlock Text="SIMULATION TIME"
+                               Foreground="#888888"
+                               FontSize="16"
+                               FontFamily="Consolas, monospace"
+                               FontWeight="Bold"/>
+
+                    <TextBlock Text="{Binding ClockText}"
+                               Foreground="White"
+                               FontSize="12"
+                               Opacity="0.5"
+                               FontFamily="Consolas, monospace"
+                               FontWeight="SemiBold"/>
+                </StackPanel>
+
+            </Grid>
+
+
+            <StackPanel Grid.Row="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Spacing="12">
+
+                <Button Name="BtnStepBack"
+                        Classes="Btn-Time"
+                        Command="{Binding StepBack}"
+                        ToolTip.Tip="Previous hour">
+                    <Image Source="/Assets/Images/TimeSkip-icon.png">
+                        <Image.RenderTransform>
+                            <RotateTransform Angle="180"/>
+                        </Image.RenderTransform>
+                    </Image>
+                </Button>
+
+                <Button Name="BtnPause" Classes="Btn-Time" Command="{Binding TogglePlay}" ToolTip.Tip="Play / Pause">
+                    <Panel>
+                        <Image Source="/Assets/Images/TimePlay-icon.png" 
+                               IsVisible="{Binding !IsPlaying}"/>
+        
+                        <Image Source="/Assets/Images/TimePause-icon.png" 
+                               IsVisible="{Binding IsPlaying}"/>
+                    </Panel>
+                </Button>
+
+                <Button Name="BtnStepFwd"
+                        Classes="Btn-Time"
+                        Command="{Binding StepForward}"
+                        ToolTip.Tip="Next hour">
+                    <Image Source="/Assets/Images/TimeSkip-icon.png"/>
+                </Button>
+
+            </StackPanel>
+           
+        </Grid>
+    </Border>
+    </Grid>
+
+            <!-- Analytics page (later) -->
+            <TextBlock Text="WIP"
+                       Foreground="White" FontSize="24"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                       IsVisible="{Binding IsAnalyticsMode}"/>
+        </Grid>
+    </Grid>
+</Window>

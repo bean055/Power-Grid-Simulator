@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PowerGridBlueprint xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" TownName="SimTown">
+
+	<Nodes>
+		<!-- Slack / Power Plant Node -->
+		<MapNode xsi:type="GeneratorNode" Id="N1" Name="Main Plant" X="0" Y="0" NominalKV="400" GeneratorType="PowerPlant" VoltageSetpointPu="1.02">
+			<Rating NominalMW="200" ThermalLimitMW="200" EmergencyLimitMW="230" />
+		</MapNode>
+
+		<!-- Transmission Substation -->
+		<MapNode xsi:type="SubstationNode" Id="N2" Name="Substation Alpha" X="300" Y="400" NominalKV="400" SubstationType="TransmissionSubstation">
+			<Rating NominalMW="150" ThermalLimitMW="150" EmergencyLimitMW="175" />
+		</MapNode>
+
+		<!-- Consumer Load Node -->
+		<MapNode xsi:type="ConsumerNode" Id="N3" Name="Downtown Industrial" X="600" Y="800" NominalKV="132" ConsumerType="Industrial" PowerFactor="0.90">
+			<Rating NominalMW="80" ThermalLimitMW="80" EmergencyLimitMW="95" />
+		</MapNode>
+	</Nodes>
+
+	<Cables>
+		<!-- Cable 1: Generator to Substation -->
+		<GridCable Id="C1" Name="Line 1-2" Type="TransmissionLine" FromNodeId="N1" ToNodeId="N2" LengthKm="5.0">
+			<Rating NominalMW="150" ThermalLimitMW="150" EmergencyLimitMW="180" />
+		</GridCable>
+
+		<!-- Cable 2: Substation to Consumer -->
+		<GridCable Id="C2" Name="Line 2-3" Type="TransmissionLine" FromNodeId="N2" ToNodeId="N3" LengthKm="7.5">
+			<Rating NominalMW="100" ThermalLimitMW="100" EmergencyLimitMW="120" />
+		</GridCable>
+	</Cables>
+</PowerGridBlueprint>
