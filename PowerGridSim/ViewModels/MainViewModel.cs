@@ -73,8 +73,7 @@ public partial class MainViewModel : ObservableObject
         _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
         _timer.Tick += OnTimerTick;
 
-        string path = Path.Combine(AppContext.BaseDirectory, "Data", "Map.xml");
-        Blueprint = XmlMapLoader.Load(path);
+        Blueprint = XmlMapLoader.Load(MapPaths.LoadPath);
 
         if (Blueprint != null)
         {
@@ -83,20 +82,51 @@ public partial class MainViewModel : ObservableObject
                 Debug.WriteLine(
                     $"{Blueprint.Cables[i].Id}: {imp[i].LengthKm:F1} km | R={imp[i].RPu:F4} pu | X={imp[i].XPu:F4} pu");
 
-            var events = new List<SimEvent> { new(30, SimEventType.BreakCable, "Cable4") };
-            Timeline = Simulator.Run(Blueprint, events, 168);
-
-            var f = Timeline.Frames[0];
-            Debug.WriteLine(
-                $"{Blueprint.TownName}: {Blueprint.Nodes.Count} nodes, {Blueprint.Cables.Count} cables, " +
-                $"{Timeline.Frames.Count} frames, hour 0 gen {f.TotalGenerationMW:F0} MW / demand {f.TotalDemandMW:F0} MW");
+            RunSimulation();
         }
+    }
+    void RunSimulation()
+    {
+        if (Blueprint == null) return;
+
+        var events = new List<SimEvent> { new(30, SimEventType.BreakCable, "Cable4") };
+        Timeline = Simulator.Run(Blueprint, events, 168);
+
+        var f = Timeline.Frames[0];
+        Debug.WriteLine(
+            $"{Blueprint.TownName}: {Blueprint.Nodes.Count} nodes, {Blueprint.Cables.Count} cables, " +
+            $"{Timeline.Frames.Count} frames, hour 0 gen {f.TotalGenerationMW:F0} MW / demand {f.TotalDemandMW:F0} MW");
     }
 
     [RelayCommand]
     private void SetMode(string mode)
     {
         IsLiveMapMode = mode == "LiveMap";
+    }
+    
+
+    [RelayCommand]
+    public void SaveMap()
+    {
+        if (Blueprint is null) return;
+        XmlMapLoader.Save(Blueprint, MapPaths.UserMap);
+    }
+    [RelayCommand]
+    public void ResetMap()
+    {
+        Pause();
+        SelectedNode = null;         
+
+        try { Blueprint = XmlMapLoader.Load(MapPaths.LoadPath); }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"load failed: {ex.Message}");
+            Blueprint = XmlMapLoader.Load(MapPaths.DefaultMap);
+        }
+
+        CurrentHour = 0;
+        SecondsIntoHour = 0;
+        RunSimulation();             
     }
 
     // Time 

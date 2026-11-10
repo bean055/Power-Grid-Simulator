@@ -26,6 +26,11 @@ public class MapViewpoint : Control //ADD MOVEMENT ?+ CHANGE WORLD RATIO?
     bool _panning, _initialised;
     Point _panStartMouse;
     Vector _panStart;
+    Vector _moveOffset;
+    bool _moving;
+    MapNode? _moveNode;
+    
+    public event Action<MapNode>? NodeMoved;
 
     double MinZoom => Math.Max(0.01, Math.Min(Bounds.Width / WorldW, Bounds.Height / WorldH));
 
@@ -61,6 +66,8 @@ public class MapViewpoint : Control //ADD MOVEMENT ?+ CHANGE WORLD RATIO?
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
         var props = e.GetCurrentPoint(this).Properties;
+        var mouseScreen = e.GetPosition(this);
+        var mouseWorld = ScreenToWorld(mouseScreen);
 
         if (props.IsMiddleButtonPressed)
         {
@@ -69,6 +76,15 @@ public class MapViewpoint : Control //ADD MOVEMENT ?+ CHANGE WORLD RATIO?
             _panStart = _pan;
             e.Pointer.Capture(this);
             Cursor = new Cursor(StandardCursorType.SizeAll);
+            e.Handled = true;
+        }
+        else if (props.IsLeftButtonPressed && e.KeyModifiers.HasFlag(KeyModifiers.Control))
+        {
+            SelectedNode = HitTest(ScreenToWorld(e.GetPosition(this)));
+            _moving = true;
+            _moveNode = SelectedNode;
+            _moveOffset = new Vector(_moveNode.X - mouseWorld.X, _moveNode.Y - mouseWorld.Y);
+            e.Pointer.Capture(this);
             e.Handled = true;
         }
         else if (props.IsLeftButtonPressed)
@@ -80,16 +96,33 @@ public class MapViewpoint : Control //ADD MOVEMENT ?+ CHANGE WORLD RATIO?
 
     protected override void OnPointerMoved(PointerEventArgs e)
     {
-        if (!_panning) return;
-        _pan = _panStart + (e.GetPosition(this) - _panStartMouse);
-        ClampPan();
-        InvalidateVisual();
+        var mouseScreen = e.GetPosition(this);
+
+        if (_panning)
+        {
+            _pan = _panStart + (mouseScreen - _panStartMouse);
+            ClampPan();
+            InvalidateVisual();
+        }
+        else if (_moving && _moveNode != null)
+        {
+            var mouseWorld = ScreenToWorld(mouseScreen);
+
+            _moveNode.X = mouseWorld.X + _moveOffset.X;
+            _moveNode.Y = mouseWorld.Y + _moveOffset.Y;
+
+            NodeMoved?.Invoke(_moveNode);
+
+            InvalidateVisual();
+            e.Handled = true;
+        }
     }
 
     protected override void OnPointerReleased(PointerReleasedEventArgs e)
     {
-        if (!_panning) return;
+        if (!_panning && !_moving) return;
         _panning = false;
+        _moving = false;
         e.Pointer.Capture(null);
         Cursor = Cursor.Default;
     }

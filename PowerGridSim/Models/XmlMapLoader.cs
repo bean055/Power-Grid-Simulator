@@ -24,9 +24,11 @@ namespace PowerGridSim.Models
 
         public static void Save(PowerGridBlueprint blueprint, string path)
         {
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
             var serializer = new XmlSerializer(typeof(PowerGridBlueprint));
             using var writer = new StreamWriter(path);
             serializer.Serialize(writer, blueprint);
+            System.Diagnostics.Debug.WriteLine($"saved at {path}");
         }
     }
 }

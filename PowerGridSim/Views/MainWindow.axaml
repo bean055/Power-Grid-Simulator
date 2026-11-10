@@ -38,8 +38,14 @@
             <Setter Property="FontSize" Value="12"/>
         </Style>
         <Style Selector="Button.Btn-Time">
-            <Setter Property="Width" Value="40"/>
-            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Background" Value="#282C2E"/>
+        </Style>
+        <Style Selector="Button.Btn-Grid">
+            <Setter Property="MinWidth" Value="60"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Background" Value="#080A0B"/>
         </Style>
     </Window.Styles>
 
@@ -82,9 +88,10 @@
 
                     <Panel Grid.Column="1" Background="#101416" MinWidth="250">
                     <StackPanel Margin="10" Spacing="6">
-                        <TextBlock Text="Inspector" FontWeight="Bold" FontSize="16" Foreground="White"/>
+                        <TextBlock Text="Inspector" FontWeight="Bold" FontSize="16" 
+                                   FontFamily="Consolas, Courier New, monospace" Foreground="#888888"/>
 
-                        <TextBlock Text="Click a node to inspect it" Foreground="#888888"
+                        <TextBlock Text="[Click a node to inspect it]" Foreground="#888888"
                                    IsVisible="{Binding !HasSelection}"/>
 
                         <StackPanel Spacing="6" IsVisible="{Binding HasSelection}">
@@ -127,10 +134,9 @@
  </Grid>
     <Border Grid.Row="1" Background="#101416" Padding="16,10">
 
-        <Grid RowDefinitions="Auto,Auto,Auto">
+        <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
 
-            <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
-                <StackPanel Grid.Column="0" Spacing="2">
+            <StackPanel Grid.Row="0" Grid.Column="0" Spacing="2">
                     <TextBlock Text="SIMULATION TIME"
                                Foreground="#888888"
                                FontSize="16"
@@ -142,15 +148,24 @@
                                FontSize="12"
                                Opacity="0.5"
                                FontFamily="Consolas, monospace"
-                               FontWeight="SemiBold"/>
-                </StackPanel>
+                               FontWeight="SemiBold"/>             
 
-            </Grid>
+            </StackPanel>
+            <StackPanel Grid.Row="0" Grid.Column="1"
+                        Orientation="Horizontal">
+            <Button 
+                    Content="Save Map"
+                    Classes="Btn-Grid"
+                    Command="{Binding SaveMap}"/>
+            <Button 
+                    Content="Reset Map"
+                    Classes="Btn-Grid"
+                    Command="{Binding ResetMap}"/>
+            </StackPanel>
 
 
-            <StackPanel Grid.Row="2"
+            <StackPanel Grid.Row="2" Grid.Column="0"
                         Orientation="Horizontal"
-                        HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Spacing="12">
 
